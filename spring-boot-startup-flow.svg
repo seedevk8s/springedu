@@ -1,0 +1,126 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <!-- 제목 -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    SpringApplication.run() 실행 프로세스
+  </text>
+  
+  <!-- main 메소드 박스 -->
+  <g id="main-method">
+    <rect x="50" y="60" width="700" height="80" rx="10" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+    <text x="400" y="95" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+      main(String[] args)
+    </text>
+    <text x="400" y="120" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">
+      SpringApplication.run(SevletApplication.class, args) 호출
+    </text>
+  </g>
+  
+  <!-- 화살표 1 -->
+  <path d="M 400 140 L 400 170" stroke="#34495e" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 1: Spring Application Context -->
+  <g id="step1">
+    <rect x="150" y="180" width="500" height="100" rx="10" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+    <circle cx="180" cy="230" r="20" fill="white"/>
+    <text x="180" y="238" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#27ae60">1</text>
+    <text x="420" y="210" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Spring 애플리케이션 컨텍스트 생성
+    </text>
+    <text x="220" y="235" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • Bean 정의 로드 및 등록
+    </text>
+    <text x="220" y="255" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • 의존성 주입(DI) 준비
+    </text>
+    <text x="440" y="235" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • @Configuration 클래스 처리
+    </text>
+    <text x="440" y="255" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • @ComponentScan 실행
+    </text>
+  </g>
+  
+  <!-- 화살표 2 -->
+  <path d="M 400 280 L 400 310" stroke="#34495e" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 2: 내장 톰캣 서버 -->
+  <g id="step2">
+    <rect x="150" y="320" width="500" height="100" rx="10" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+    <circle cx="180" cy="370" r="20" fill="white"/>
+    <text x="180" y="378" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#e74c3c">2</text>
+    <text x="420" y="350" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      내장 톰캣 서버 실행
+    </text>
+    <text x="220" y="375" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • Tomcat 인스턴스 생성
+    </text>
+    <text x="220" y="395" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • 기본 포트 8080 바인딩
+    </text>
+    <text x="440" y="375" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • HTTP 커넥터 설정
+    </text>
+    <text x="440" y="395" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • 웹 서버 시작
+    </text>
+  </g>
+  
+  <!-- 화살표 3 -->
+  <path d="M 400 420 L 400 450" stroke="#34495e" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 3: 서블릿 컨테이너 초기화 -->
+  <g id="step3">
+    <rect x="150" y="460" width="500" height="100" rx="10" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+    <circle cx="180" cy="510" r="20" fill="white"/>
+    <text x="180" y="518" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#9b59b6">3</text>
+    <text x="420" y="490" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      서블릿 컨테이너 초기화
+    </text>
+    <text x="220" y="515" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • @ServletComponentScan 처리
+    </text>
+    <text x="220" y="535" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • @WebServlet 클래스 등록
+    </text>
+    <text x="440" y="515" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • DispatcherServlet 설정
+    </text>
+    <text x="440" y="535" font-family="Arial, sans-serif" font-size="13" fill="white">
+      • 필터/리스너 등록
+    </text>
+  </g>
+  
+  <!-- 포트 정보 박스 -->
+  <g id="port-info">
+    <rect x="50" y="70" width="120" height="40" rx="5" fill="#f39c12" stroke="#e67e22" stroke-width="1"/>
+    <text x="110" y="95" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      localhost:8080
+    </text>
+  </g>
+  
+  <!-- 완료 상태 -->
+  <g id="ready">
+    <rect x="660" y="480" width="120" height="60" rx="8" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+    <text x="720" y="505" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      애플리케이션
+    </text>
+    <text x="720" y="525" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      준비 완료!
+    </text>
+  </g>
+  
+  <!-- 화살표 마커 정의 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+  </defs>
+  
+  <!-- 시간 표시 (옵션) -->
+  <text x="70" y="230" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d" font-style="italic">~100ms</text>
+  <text x="70" y="370" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d" font-style="italic">~500ms</text>
+  <text x="70" y="510" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d" font-style="italic">~200ms</text>
+</svg>

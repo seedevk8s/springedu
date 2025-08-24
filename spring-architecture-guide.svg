@@ -1,0 +1,421 @@
+<svg viewBox="0 0 1600 3200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="1600" height="3200" fill="#f8f9fa"/>
+  
+  <!-- 제목 -->
+  <text x="800" y="50" text-anchor="middle" font-size="32" font-weight="bold" fill="#2c3e50">
+    Spring Boot 아키텍처와 컨테이너 구조
+  </text>
+  <text x="800" y="85" text-anchor="middle" font-size="18" fill="#7f8c8d">
+    스프링 컨테이너, 서블릿 컨테이너, 내장 톰캣의 관계 완벽 이해
+  </text>
+  
+  <!-- 1. 전체 아키텍처 Overview -->
+  <g transform="translate(50, 120)">
+    <rect x="0" y="0" width="1500" height="600" rx="10" fill="#ffffff" stroke="#e1e4e8" stroke-width="2"/>
+    <text x="750" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#0969da">
+      Spring Boot 애플리케이션 전체 구조
+    </text>
+    
+    <!-- JVM (최외곽) -->
+    <rect x="50" y="70" width="1400" height="500" rx="15" fill="#e8f5e9" stroke="#4caf50" stroke-width="3"/>
+    <text x="100" y="100" font-size="18" font-weight="bold" fill="#2e7d32">JVM (Java Virtual Machine)</text>
+    <text x="100" y="125" font-size="14" fill="#558b2f">모든 Java 프로그램이 실행되는 환경</text>
+    
+    <!-- Spring Boot Application (중간층) -->
+    <rect x="100" y="160" width="1300" height="380" rx="10" fill="#e3f2fd" stroke="#2196f3" stroke-width="3"/>
+    <text x="150" y="190" font-size="18" font-weight="bold" fill="#1565c0">Spring Boot Application (JAR)</text>
+    <text x="150" y="215" font-size="14" fill="#1976d2">실행 가능한 JAR 파일 (java -jar app.jar)</text>
+    
+    <!-- 내장 톰캣 -->
+    <rect x="150" y="250" width="580" height="260" rx="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+    <text x="440" y="280" text-anchor="middle" font-size="16" font-weight="bold" fill="#e65100">
+      내장 톰캣 (Embedded Tomcat)
+    </text>
+    
+    <!-- 서블릿 컨테이너 -->
+    <rect x="180" y="310" width="520" height="180" rx="8" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+    <text x="440" y="340" text-anchor="middle" font-size="15" font-weight="bold" fill="#c62828">
+      서블릿 컨테이너
+    </text>
+    <text x="200" y="365" font-size="13" fill="#424242">HTTP 요청/응답 처리</text>
+    <text x="200" y="385" font-size="13" fill="#424242">서블릿 생명주기 관리</text>
+    <text x="200" y="405" font-size="13" fill="#424242">세션 관리</text>
+    
+    <!-- DispatcherServlet -->
+    <rect x="210" y="420" width="460" height="50" rx="5" fill="#ffcdd2"/>
+    <text x="440" y="450" text-anchor="middle" font-size="14" font-weight="bold" fill="#b71c1c">
+      DispatcherServlet (Front Controller)
+    </text>
+    
+    <!-- 스프링 컨테이너 -->
+    <rect x="770" y="250" width="580" height="260" rx="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+    <text x="1060" y="280" text-anchor="middle" font-size="16" font-weight="bold" fill="#6a1b9a">
+      스프링 컨테이너 (ApplicationContext)
+    </text>
+    
+    <!-- Bean들 -->
+    <g transform="translate(800, 310)">
+      <rect x="0" y="0" width="150" height="60" rx="5" fill="#e1bee7"/>
+      <text x="75" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a148c">@Controller</text>
+      <text x="75" y="45" text-anchor="middle" font-size="11" fill="#424242">Bean</text>
+      
+      <rect x="170" y="0" width="150" height="60" rx="5" fill="#e1bee7"/>
+      <text x="245" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a148c">@Service</text>
+      <text x="245" y="45" text-anchor="middle" font-size="11" fill="#424242">Bean</text>
+      
+      <rect x="340" y="0" width="150" height="60" rx="5" fill="#e1bee7"/>
+      <text x="415" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a148c">@Repository</text>
+      <text x="415" y="45" text-anchor="middle" font-size="11" fill="#424242">Bean</text>
+    </g>
+    
+    <text x="800" y="410" font-size="13" fill="#424242">Bean 생명주기 관리</text>
+    <text x="800" y="430" font-size="13" fill="#424242">의존성 주입 (DI)</text>
+    <text x="800" y="450" font-size="13" fill="#424242">AOP 처리</text>
+    <text x="800" y="470" font-size="13" fill="#424242">트랜잭션 관리</text>
+    
+    <!-- 연결선 -->
+    <path d="M 680 445 L 770 445" stroke="#757575" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+    <text x="725" y="435" text-anchor="middle" font-size="12" fill="#757575">요청 전달</text>
+  </g>
+  
+  <!-- 2. 각 컨테이너 상세 설명 -->
+  <g transform="translate(50, 750)">
+    <rect x="0" y="0" width="1500" height="700" rx="10" fill="#ffffff" stroke="#e1e4e8" stroke-width="2"/>
+    <text x="750" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#0969da">
+      각 컨테이너의 역할과 책임
+    </text>
+    
+    <!-- 내장 톰캣 상세 -->
+    <g transform="translate(50, 70)">
+      <rect x="0" y="0" width="450" height="280" rx="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+      <rect x="0" y="0" width="450" height="50" rx="10" fill="#ff9800"/>
+      <text x="225" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="white">
+        내장 톰캣 (Embedded Tomcat)
+      </text>
+      
+      <text x="20" y="80" font-size="15" font-weight="bold" fill="#e65100">역할:</text>
+      <text x="20" y="105" font-size="13" fill="#424242">웹 서버 기능 제공</text>
+      <text x="20" y="125" font-size="13" fill="#424242">HTTP 프로토콜 처리</text>
+      <text x="20" y="145" font-size="13" fill="#424242">포트 리스닝 (기본 8080)</text>
+      <text x="20" y="165" font-size="13" fill="#424242">정적 리소스 제공 (HTML, CSS, JS)</text>
+      
+      <rect x="20" y="185" width="410" height="60" rx="5" fill="#ffe0b2"/>
+      <text x="30" y="205" font-size="13" font-weight="bold" fill="#e65100">핵심 포인트:</text>
+      <text x="30" y="225" font-size="12" fill="#424242">별도 설치 불필요! JAR 안에 포함되어 있음</text>
+    </g>
+    
+    <!-- 서블릿 컨테이너 상세 -->
+    <g transform="translate(525, 70)">
+      <rect x="0" y="0" width="450" height="280" rx="10" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+      <rect x="0" y="0" width="450" height="50" rx="10" fill="#ef5350"/>
+      <text x="225" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="white">
+        서블릿 컨테이너
+      </text>
+      
+      <text x="20" y="80" font-size="15" font-weight="bold" fill="#c62828">역할:</text>
+      <text x="20" y="105" font-size="13" fill="#424242">서블릿 생명주기 관리</text>
+      <text x="20" y="125" font-size="13" fill="#424242">HTTP 요청을 서블릿에 매핑</text>
+      <text x="20" y="145" font-size="13" fill="#424242">멀티스레딩 처리</text>
+      <text x="20" y="165" font-size="13" fill="#424242">세션 관리</text>
+      
+      <rect x="20" y="185" width="410" height="60" rx="5" fill="#ffcdd2"/>
+      <text x="30" y="205" font-size="13" font-weight="bold" fill="#c62828">핵심 포인트:</text>
+      <text x="30" y="225" font-size="12" fill="#424242">DispatcherServlet이 모든 요청을 받아 처리</text>
+    </g>
+    
+    <!-- 스프링 컨테이너 상세 -->
+    <g transform="translate(1000, 70)">
+      <rect x="0" y="0" width="450" height="280" rx="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+      <rect x="0" y="0" width="450" height="50" rx="10" fill="#9c27b0"/>
+      <text x="225" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="white">
+        스프링 컨테이너 (IoC Container)
+      </text>
+      
+      <text x="20" y="80" font-size="15" font-weight="bold" fill="#6a1b9a">역할:</text>
+      <text x="20" y="105" font-size="13" fill="#424242">Bean 객체 생성 및 관리</text>
+      <text x="20" y="125" font-size="13" fill="#424242">의존성 주입 (DI) 처리</text>
+      <text x="20" y="145" font-size="13" fill="#424242">AOP(관점 지향 프로그래밍) 적용</text>
+      <text x="20" y="165" font-size="13" fill="#424242">트랜잭션 관리</text>
+      
+      <rect x="20" y="185" width="410" height="60" rx="5" fill="#e1bee7"/>
+      <text x="30" y="205" font-size="13" font-weight="bold" fill="#6a1b9a">핵심 포인트:</text>
+      <text x="30" y="225" font-size="12" fill="#424242">개발자가 작성한 비즈니스 로직이 여기서 실행</text>
+    </g>
+    
+    <!-- 관계 설명 -->
+    <rect x="50" y="370" width="1400" height="300" rx="10" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+    <text x="750" y="400" text-anchor="middle" font-size="18" font-weight="bold" fill="#424242">
+      컨테이너 간 협력 관계
+    </text>
+    
+    <!-- 요청 흐름 -->
+    <g transform="translate(100, 430)">
+      <!-- 1. 클라이언트 -->
+      <rect x="0" y="0" width="150" height="80" rx="5" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+      <text x="75" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">클라이언트</text>
+      <text x="75" y="50" text-anchor="middle" font-size="12" fill="#424242">(브라우저)</text>
+      
+      <text x="160" y="25" font-size="11" fill="#757575">HTTP 요청</text>
+      
+      <!-- 2. 내장 톰캣 -->
+      <rect x="200" y="0" width="150" height="80" rx="5" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+      <text x="275" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#e65100">내장 톰캣</text>
+      <text x="275" y="50" text-anchor="middle" font-size="12" fill="#424242">:8080</text>
+      
+      <!-- 3. 서블릿 컨테이너 -->
+      <rect x="400" y="0" width="200" height="80" rx="5" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+      <text x="500" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#c62828">서블릿 컨테이너</text>
+      <text x="500" y="50" text-anchor="middle" font-size="12" fill="#424242">DispatcherServlet</text>
+      
+      <!-- 4. 스프링 컨테이너 -->
+      <rect x="650" y="0" width="200" height="80" rx="5" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+      <text x="750" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#6a1b9a">스프링 컨테이너</text>
+      <text x="750" y="50" text-anchor="middle" font-size="12" fill="#424242">Controller/Service</text>
+      
+      <!-- 5. 데이터베이스 -->
+      <rect x="900" y="0" width="150" height="80" rx="5" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+      <text x="975" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e7d32">Database</text>
+      <text x="975" y="50" text-anchor="middle" font-size="12" fill="#424242">(Optional)</text>
+    </g>
+    
+    <!-- 응답 흐름 -->
+    <g transform="translate(100, 530)">
+      <path d="M 1050 40 L 100 40" stroke="#757575" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+      <text x="575" y="30" text-anchor="middle" font-size="12" fill="#757575">HTTP 응답 (JSON/HTML)</text>
+    </g>
+    
+    <!-- 처리 순서 -->
+    <g transform="translate(100, 580)">
+      <text x="0" y="20" font-size="14" font-weight="bold" fill="#424242">처리 순서:</text>
+      <text x="0" y="45" font-size="12" fill="#616161">1. 톰캣이 8080 포트로 HTTP 요청 수신</text>
+      <text x="0" y="65" font-size="12" fill="#616161">2. 서블릿 컨테이너가 DispatcherServlet 호출</text>
+      <text x="500" y="45" font-size="12" fill="#616161">3. 스프링 컨테이너에서 적절한 Controller 찾기</text>
+      <text x="500" y="65" font-size="12" fill="#616161">4. 비즈니스 로직 실행 후 응답 반환</text>
+    </g>
+  </g>
+  
+  <!-- 3. Bean과 DI 설명 -->
+  <g transform="translate(50, 1480)">
+    <rect x="0" y="0" width="1500" height="500" rx="10" fill="#ffffff" stroke="#e1e4e8" stroke-width="2"/>
+    <text x="750" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#0969da">
+      Bean과 의존성 주입(DI) 이해하기
+    </text>
+    
+    <!-- Bean이란? -->
+    <g transform="translate(50, 70)">
+      <rect x="0" y="0" width="680" height="180" rx="10" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+      <text x="340" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2e7d32">
+        Bean이란?
+      </text>
+      <text x="20" y="60" font-size="14" fill="#424242">스프링 컨테이너가 관리하는 객체</text>
+      <text x="20" y="85" font-size="14" fill="#424242">@Component, @Service, @Repository, @Controller 붙은 클래스</text>
+      <text x="20" y="110" font-size="14" fill="#424242">스프링이 생성, 초기화, 소멸까지 관리</text>
+      <text x="20" y="135" font-size="14" fill="#424242">싱글톤 패턴으로 관리 (기본값)</text>
+    </g>
+    
+    <!-- DI 예제 -->
+    <g transform="translate(770, 70)">
+      <rect x="0" y="0" width="680" height="180" rx="10" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+      <text x="340" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">
+        의존성 주입 (Dependency Injection)
+      </text>
+      
+      <!-- 코드 예제 -->
+      <rect x="20" y="45" width="640" height="120" rx="5" fill="#263238"/>
+      <text x="30" y="70" font-family="monospace" font-size="12" fill="#aed581">@Service</text>
+      <text x="30" y="90" font-family="monospace" font-size="12" fill="#64b5f6">public class</text>
+      <text x="130" y="90" font-family="monospace" font-size="12" fill="#fff">UserService {</text>
+      <text x="50" y="110" font-family="monospace" font-size="12" fill="#aed581">@Autowired</text>
+      <text x="150" y="110" font-family="monospace" font-size="12" fill="#9e9e9e">// 스프링이 자동으로 주입!</text>
+      <text x="50" y="130" font-family="monospace" font-size="12" fill="#64b5f6">private</text>
+      <text x="110" y="130" font-family="monospace" font-size="12" fill="#fff">UserRepository repository;</text>
+      <text x="30" y="150" font-family="monospace" font-size="12" fill="#fff">}</text>
+    </g>
+    
+    <!-- Bean 생명주기 -->
+    <g transform="translate(50, 270)">
+      <rect x="0" y="0" width="1400" height="180" rx="10" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+      <text x="700" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#424242">
+        Bean 생명주기
+      </text>
+      
+      <!-- 생명주기 단계 -->
+      <g transform="translate(100, 60)">
+        <rect x="0" y="0" width="200" height="80" rx="5" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+        <text x="100" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e7d32">1. 생성</text>
+        <text x="100" y="50" text-anchor="middle" font-size="12" fill="#424242">스프링 컨테이너</text>
+        <text x="100" y="65" text-anchor="middle" font-size="12" fill="#424242">시작 시</text>
+        
+        <rect x="250" y="0" width="200" height="80" rx="5" fill="#bbdefb" stroke="#2196f3" stroke-width="2"/>
+        <text x="350" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">2. 의존성 주입</text>
+        <text x="350" y="50" text-anchor="middle" font-size="12" fill="#424242">@Autowired</text>
+        <text x="350" y="65" text-anchor="middle" font-size="12" fill="#424242">처리</text>
+        
+        <rect x="500" y="0" width="200" height="80" rx="5" fill="#ce93d8" stroke="#9c27b0" stroke-width="2"/>
+        <text x="600" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#6a1b9a">3. 초기화</text>
+        <text x="600" y="50" text-anchor="middle" font-size="12" fill="#424242">@PostConstruct</text>
+        <text x="600" y="65" text-anchor="middle" font-size="12" fill="#424242">실행</text>
+        
+        <rect x="750" y="0" width="200" height="80" rx="5" fill="#ffcc80" stroke="#ff9800" stroke-width="2"/>
+        <text x="850" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#e65100">4. 사용</text>
+        <text x="850" y="50" text-anchor="middle" font-size="12" fill="#424242">요청 처리</text>
+        
+        <rect x="1000" y="0" width="200" height="80" rx="5" fill="#ef9a9a" stroke="#ef5350" stroke-width="2"/>
+        <text x="1100" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#c62828">5. 소멸</text>
+        <text x="1100" y="50" text-anchor="middle" font-size="12" fill="#424242">@PreDestroy</text>
+        <text x="1100" y="65" text-anchor="middle" font-size="12" fill="#424242">종료 시</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- 4. 실제 코드와 매핑 -->
+  <g transform="translate(50, 2010)">
+    <rect x="0" y="0" width="1500" height="550" rx="10" fill="#ffffff" stroke="#e1e4e8" stroke-width="2"/>
+    <text x="750" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#0969da">
+      실제 코드와 컨테이너 매핑
+    </text>
+    
+    <!-- 코드 예제 -->
+    <g transform="translate(50, 70)">
+      <rect x="0" y="0" width="700" height="320" rx="10" fill="#263238"/>
+      <text x="20" y="30" font-family="monospace" font-size="13" fill="#aed581">@SpringBootApplication</text>
+      <text x="250" y="30" font-family="monospace" font-size="11" fill="#9e9e9e">// 스프링 컨테이너 생성</text>
+      <text x="20" y="50" font-family="monospace" font-size="13" fill="#aed581">@ServletComponentScan</text>
+      <text x="250" y="50" font-family="monospace" font-size="11" fill="#9e9e9e">// 서블릿 컨테이너 설정</text>
+      <text x="20" y="70" font-family="monospace" font-size="13" fill="#64b5f6">public class</text>
+      <text x="130" y="70" font-family="monospace" font-size="13" fill="#fff">ServletApplication {</text>
+      
+      <text x="40" y="100" font-family="monospace" font-size="13" fill="#64b5f6">public static void</text>
+      <text x="190" y="100" font-family="monospace" font-size="13" fill="#ffd54f">main</text>
+      <text x="230" y="100" font-family="monospace" font-size="13" fill="#fff">(String[] args) {</text>
+      
+      <rect x="60" y="115" width="600" height="25" rx="3" fill="#37474f"/>
+      <text x="70" y="133" font-family="monospace" font-size="13" fill="#fff">SpringApplication.run(ServletApplication.class, args);</text>
+      
+      <text x="70" y="160" font-family="monospace" font-size="11" fill="#9e9e9e">// 이 한 줄이 하는 일:</text>
+      <text x="70" y="180" font-family="monospace" font-size="11" fill="#81c784">// 1. 스프링 컨테이너(ApplicationContext) 생성</text>
+      <text x="70" y="200" font-family="monospace" font-size="11" fill="#81c784">// 2. 컴포넌트 스캔으로 Bean 등록</text>
+      <text x="70" y="220" font-family="monospace" font-size="11" fill="#81c784">// 3. 내장 톰캣 서버 시작</text>
+      <text x="70" y="240" font-family="monospace" font-size="11" fill="#81c784">// 4. 서블릿 컨테이너 초기화</text>
+      <text x="70" y="260" font-family="monospace" font-size="11" fill="#81c784">// 5. DispatcherServlet 등록</text>
+      
+      <text x="40" y="285" font-family="monospace" font-size="13" fill="#fff">}</text>
+      <text x="20" y="305" font-family="monospace" font-size="13" fill="#fff">}</text>
+    </g>
+    
+    <!-- 매핑 다이어그램 -->
+    <g transform="translate(800, 70)">
+      <rect x="0" y="0" width="650" height="350" rx="10" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+      <text x="325" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#424242">
+        컨테이너 초기화 순서
+      </text>
+      
+      <!-- 순서도 -->
+      <g transform="translate(50, 60)">
+        <circle cx="30" cy="30" r="20" fill="#4caf50"/>
+        <text x="30" y="37" text-anchor="middle" font-size="14" font-weight="bold" fill="white">1</text>
+        <text x="80" y="35" font-size="13" fill="#424242">JVM 시작</text>
+        
+        <line x1="30" y1="50" x2="30" y2="80" stroke="#757575" stroke-width="2"/>
+        
+        <circle cx="30" cy="100" r="20" fill="#2196f3"/>
+        <text x="30" y="107" text-anchor="middle" font-size="14" font-weight="bold" fill="white">2</text>
+        <text x="80" y="105" font-size="13" fill="#424242">Spring ApplicationContext 생성</text>
+        
+        <line x1="30" y1="120" x2="30" y2="150" stroke="#757575" stroke-width="2"/>
+        
+        <circle cx="30" cy="170" r="20" fill="#9c27b0"/>
+        <text x="30" y="177" text-anchor="middle" font-size="14" font-weight="bold" fill="white">3</text>
+        <text x="80" y="175" font-size="13" fill="#424242">@Component 스캔 및 Bean 등록</text>
+        
+        <line x1="30" y1="190" x2="30" y2="220" stroke="#757575" stroke-width="2"/>
+        
+        <circle cx="30" cy="240" r="20" fill="#ff9800"/>
+        <text x="30" y="247" text-anchor="middle" font-size="14" font-weight="bold" fill="white">4</text>
+        <text x="80" y="245" font-size="13" fill="#424242">내장 톰캣 시작 (포트 8080)</text>
+        
+        <line x1="30" y1="260" x2="30" y2="290" stroke="#757575" stroke-width="2"/>
+        
+        <circle cx="30" cy="310" r="20" fill="#ef5350"/>
+        <text x="30" y="317" text-anchor="middle" font-size="14" font-weight="bold" fill="white">5</text>
+        <text x="80" y="315" font-size="13" fill="#424242">서블릿 컨테이너 초기화</text>
+      </g>
+    </g>
+    
+    <!-- 실행 로그 예시 -->
+    <rect x="50" y="440" width="1400" height="100" rx="10" fill="#263238"/>
+    <text x="70" y="465" font-family="monospace" font-size="11" fill="#4caf50">  .   ____          _            __ _ _</text>
+    <text x="70" y="485" font-family="monospace" font-size="11" fill="#81c784">Starting ServletApplication using Java 17...</text>
+    <text x="70" y="505" font-family="monospace" font-size="11" fill="#ffd54f">Tomcat started on port(s): 8080 (http)</text>
+    <text x="70" y="525" font-family="monospace" font-size="11" fill="#64b5f6">Started ServletApplication in 2.345 seconds</text>
+  </g>
+  
+  <!-- 5. 핵심 요약 -->
+  <g transform="translate(50, 2590)">
+    <rect x="0" y="0" width="1500" height="550" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+    <text x="750" y="40" text-anchor="middle" font-size="26" font-weight="bold" fill="#155724">
+      핵심 요약: 3개의 컨테이너 역할
+    </text>
+    
+    <!-- 요약 카드들 -->
+    <g transform="translate(100, 80)">
+      <!-- 내장 톰캣 -->
+      <rect x="0" y="0" width="400" height="150" rx="10" fill="#ffffff" stroke="#ff9800" stroke-width="3"/>
+      <rect x="0" y="0" width="400" height="40" rx="10" fill="#ff9800"/>
+      <text x="200" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="white">
+        내장 톰캣
+      </text>
+      <text x="20" y="65" font-size="14" font-weight="bold" fill="#e65100">한 줄 요약:</text>
+      <text x="20" y="85" font-size="13" fill="#424242">"웹 서버 역할, HTTP 통신 담당"</text>
+      <text x="20" y="110" font-size="12" fill="#616161">포트 8080으로 요청 받기</text>
+      <text x="20" y="130" font-size="12" fill="#616161">별도 설치 없이 JAR에 포함</text>
+      
+      <!-- 서블릿 컨테이너 -->
+      <rect x="450" y="0" width="400" height="150" rx="10" fill="#ffffff" stroke="#ef5350" stroke-width="3"/>
+      <rect x="450" y="0" width="400" height="40" rx="10" fill="#ef5350"/>
+      <text x="650" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="white">
+        서블릿 컨테이너
+      </text>
+      <text x="470" y="65" font-size="14" font-weight="bold" fill="#c62828">한 줄 요약:</text>
+      <text x="470" y="85" font-size="13" fill="#424242">"HTTP 요청을 Java 코드로 연결"</text>
+      <text x="470" y="110" font-size="12" fill="#616161">DispatcherServlet이 모든 요청 처리</text>
+      <text x="470" y="130" font-size="12" fill="#616161">URL을 Controller로 매핑</text>
+      
+      <!-- 스프링 컨테이너 -->
+      <rect x="900" y="0" width="400" height="150" rx="10" fill="#ffffff" stroke="#9c27b0" stroke-width="3"/>
+      <rect x="900" y="0" width="400" height="40" rx="10" fill="#9c27b0"/>
+      <text x="1100" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="white">
+        스프링 컨테이너
+      </text>
+      <text x="920" y="65" font-size="14" font-weight="bold" fill="#6a1b9a">한 줄 요약:</text>
+      <text x="920" y="85" font-size="13" fill="#424242">"개발자 코드(Bean) 관리 및 실행"</text>
+      <text x="920" y="110" font-size="12" fill="#616161">@Service, @Repository 등 관리</text>
+      <text x="920" y="130" font-size="12" fill="#616161">의존성 주입(DI) 처리</text>
+    </g>
+    
+    <!-- 협력 관계 -->
+    <rect x="100" y="250" width="1300" height="120" rx="10" fill="#c8e6c9"/>
+    <text x="750" y="280" text-anchor="middle" font-size="18" font-weight="bold" fill="#2e7d32">
+      3개 컨테이너의 협력
+    </text>
+    <text x="750" y="310" text-anchor="middle" font-size="14" fill="#424242">
+      클라이언트 요청 - [내장 톰캣] - [서블릿 컨테이너] - [스프링 컨테이너] - 비즈니스 로직 실행
+    </text>
+    <text x="750" y="335" text-anchor="middle" font-size="14" fill="#424242">
+      응답 생성 - [스프링 컨테이너] - [서블릿 컨테이너] - [내장 톰캣] - 클라이언트로 전송
+    </text>
+    
+    <!-- 초보자 팁 -->
+    <rect x="100" y="390" width="1300" height="120" rx="10" fill="#fff9c4"/>
+    <text x="750" y="420" text-anchor="middle" font-size="18" font-weight="bold" fill="#f57f17">
+      초보자가 기억할 한 가지
+    </text>
+    <text x="750" y="455" text-anchor="middle" font-size="16" fill="#424242">
+      "Spring Boot는 이 모든 컨테이너를 자동으로 설정하고 연결해줍니다!"
+    </text>
+    <text x="750" y="480" text-anchor="middle" font-size="14" fill="#616161">
+      개발자는 @SpringBootApplication 하나로 모든 설정 완료, 비즈니스 로직에만 집중하면 됩니다.
+    </text>
+  </g>
+</svg>
