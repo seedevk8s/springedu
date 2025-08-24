@@ -1,0 +1,216 @@
+<svg viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="900" height="700" fill="#f5f6fa"/>
+  
+  <!-- 제목 -->
+  <text x="450" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Spring Boot Application Architecture
+  </text>
+  
+  <!-- 외부 클라이언트 영역 -->
+  <g id="client-layer">
+    <rect x="350" y="60" width="200" height="60" rx="10" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+    <text x="450" y="85" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      Client (Browser/App)
+    </text>
+    <text x="450" y="105" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      HTTP Request/Response
+    </text>
+  </g>
+  
+  <!-- 화살표 (양방향) -->
+  <path d="M 450 120 L 450 150" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 440 150 L 440 120" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="480" y="140" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">:8080</text>
+  
+  <!-- Spring Boot Application Container -->
+  <g id="container">
+    <rect x="50" y="160" width="800" height="520" rx="15" fill="none" stroke="#34495e" stroke-width="3" stroke-dasharray="5,5"/>
+    <text x="60" y="180" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#34495e">
+      Spring Boot Application (JVM Process)
+    </text>
+    
+    <!-- Embedded Tomcat Layer -->
+    <g id="tomcat-layer">
+      <rect x="70" y="200" width="760" height="460" rx="10" fill="#fff5f5" stroke="#e74c3c" stroke-width="2"/>
+      <rect x="70" y="200" width="760" height="40" rx="10" fill="#e74c3c"/>
+      <text x="90" y="225" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">
+        Embedded Tomcat (Web Server + Servlet Container)
+      </text>
+      <text x="630" y="225" font-family="Arial, sans-serif" font-size="11" fill="white">
+        HTTP 처리 + 서블릿 실행 환경
+      </text>
+      
+      <!-- Servlet Context -->
+      <g id="servlet-context">
+        <rect x="90" y="260" width="720" height="380" rx="10" fill="#fff9f0" stroke="#f39c12" stroke-width="2"/>
+        <text x="100" y="280" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#f39c12">
+          Servlet Context
+        </text>
+        <text x="250" y="280" font-family="Arial, sans-serif" font-size="11" fill="#e67e22" font-style="italic">
+          - 서블릿 컨테이너 내부의 핵심 구성요소들
+        </text>
+        
+        <!-- Filter Chain -->
+        <g id="filter-chain">
+          <rect x="110" y="300" width="680" height="50" rx="8" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1"/>
+          <text x="120" y="330" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#7f8c8d">
+            Filter Chain
+          </text>
+          <rect x="220" y="310" width="80" height="30" rx="5" fill="#bdc3c7"/>
+          <text x="260" y="330" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Filter 1</text>
+          <rect x="310" y="310" width="80" height="30" rx="5" fill="#bdc3c7"/>
+          <text x="350" y="330" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Filter 2</text>
+          <rect x="400" y="310" width="120" height="30" rx="5" fill="#95a5a6"/>
+          <text x="460" y="330" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Security Filter</text>
+          <text x="540" y="330" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">...</text>
+        </g>
+        
+        <!-- DispatcherServlet -->
+        <g id="dispatcher-servlet">
+          <rect x="110" y="370" width="680" height="60" rx="8" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+          <text x="450" y="395" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+            DispatcherServlet (Front Controller)
+          </text>
+          <text x="450" y="415" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+            @ServletComponentScan으로 등록된 서블릿들 관리
+          </text>
+        </g>
+        
+        <!-- Spring Application Context -->
+        <g id="spring-context">
+          <rect x="110" y="450" width="680" height="170" rx="10" fill="#e8f8f5" stroke="#27ae60" stroke-width="2"/>
+          <rect x="110" y="450" width="680" height="35" rx="10" fill="#27ae60"/>
+          <text x="130" y="473" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="white">
+            Spring Application Context (IoC Container)
+          </text>
+          
+          <!-- Controllers -->
+          <g id="controllers">
+            <rect x="130" y="500" width="150" height="40" rx="5" fill="#3498db" stroke="#2980b9" stroke-width="1"/>
+            <text x="205" y="525" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+              @Controller
+            </text>
+          </g>
+          
+          <!-- Services -->
+          <g id="services">
+            <rect x="300" y="500" width="150" height="40" rx="5" fill="#e67e22" stroke="#d35400" stroke-width="1"/>
+            <text x="375" y="525" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+              @Service
+            </text>
+          </g>
+          
+          <!-- Repositories -->
+          <g id="repositories">
+            <rect x="470" y="500" width="150" height="40" rx="5" fill="#8e44ad" stroke="#7d3c98" stroke-width="1"/>
+            <text x="545" y="525" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+              @Repository
+            </text>
+          </g>
+          
+          <!-- Configuration -->
+          <g id="configuration">
+            <rect x="640" y="500" width="130" height="40" rx="5" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+            <text x="705" y="525" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+              @Configuration
+            </text>
+          </g>
+          
+          <!-- Beans -->
+          <g id="beans">
+            <rect x="130" y="555" width="640" height="50" rx="5" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+            <text x="140" y="585" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+              Bean Factory / Dependency Injection / AOP / Event Publishing / Resource Management
+            </text>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  
+  <!-- 데이터베이스 -->
+  <g id="database">
+    <rect x="550" y="640" width="120" height="40" rx="5" fill="#2c3e50" stroke="#1a252f" stroke-width="2"/>
+    <text x="610" y="665" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      Database
+    </text>
+  </g>
+  
+  <!-- 외부 서비스 -->
+  <g id="external-services">
+    <rect x="700" y="640" width="120" height="40" rx="5" fill="#16a085" stroke="#138d75" stroke-width="2"/>
+    <text x="760" y="665" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      External APIs
+    </text>
+  </g>
+  
+  <!-- 연결선 -->
+  <path d="M 545 540 L 610 640" stroke="#7f8c8d" stroke-width="1" stroke-dasharray="3,3"/>
+  <path d="M 620 540 L 760 640" stroke="#7f8c8d" stroke-width="1" stroke-dasharray="3,3"/>
+  
+  <!-- 주요 어노테이션 설명 -->
+  <g id="annotations-legend">
+    <rect x="50" y="50" width="250" height="90" rx="5" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="60" y="70" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2c3e50">
+      Key Annotations:
+    </text>
+    <text x="60" y="90" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">
+      • @SpringBootApplication - 메인 클래스
+    </text>
+    <text x="60" y="105" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">
+      • @ServletComponentScan - 서블릿 자동 등록
+    </text>
+    <text x="60" y="120" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">
+      • @WebServlet, @WebFilter - 서블릿 컴포넌트
+    </text>
+    <text x="60" y="135" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">
+      • @RestController, @Service, @Repository
+    </text>
+  </g>
+  
+  <!-- 요청 흐름 표시 -->
+  <g id="request-flow">
+    <rect x="600" y="50" width="250" height="90" rx="5" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="610" y="70" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2c3e50">
+      Request Flow:
+    </text>
+    <text x="610" y="90" font-family="Arial, sans-serif" font-size="10" fill="#e74c3c">
+      1. Client → Tomcat (Port 8080)
+    </text>
+    <text x="610" y="105" font-family="Arial, sans-serif" font-size="10" fill="#f39c12">
+      2. Tomcat → Filter Chain
+    </text>
+    <text x="610" y="120" font-family="Arial, sans-serif" font-size="10" fill="#9b59b6">
+      3. Filters → DispatcherServlet
+    </text>
+    <text x="610" y="135" font-family="Arial, sans-serif" font-size="10" fill="#27ae60">
+      4. DispatcherServlet → Controller → Service
+    </text>
+  </g>
+  
+  <!-- 웹 서버 위치 표시 -->
+  <g id="web-server-indicator">
+    <path d="M 850 220 L 880 220" stroke="#e74c3c" stroke-width="2" fill="none"/>
+    <rect x="885" y="200" width="10" height="40" rx="2" fill="#e74c3c" opacity="0.3"/>
+    <text x="850" y="195" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#e74c3c" text-anchor="end">
+      웹 서버
+    </text>
+    <text x="850" y="210" font-family="Arial, sans-serif" font-size="10" fill="#c0392b" text-anchor="end">
+      (HTTP 요청 수신)
+    </text>
+    <text x="850" y="250" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f39c12" text-anchor="end">
+      서블릿 컨테이너
+    </text>
+    <text x="850" y="265" font-family="Arial, sans-serif" font-size="10" fill="#e67e22" text-anchor="end">
+      (서블릿 실행)
+    </text>
+  </g>
+  
+  <!-- 화살표 마커 정의 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+  </defs>
+</svg>
