@@ -1,0 +1,431 @@
+<svg viewBox="0 0 900 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="900" height="800" fill="#f8f9fa"/>
+  
+  <!-- Request/Response 객체 생명주기 -->
+  <g id="req-res-lifecycle">
+    <rect x="590" y="50" width="280" height="140" rx="8" fill="white" stroke="#e74c3c" stroke-width="2"/>
+    <text x="730" y="70" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+      🔄 Request/Response 생명주기
+    </text>
+    
+    <line x1="600" y1="80" x2="860" y2="80" stroke="#ecf0f1" stroke-width="1"/>
+    
+    <text x="605" y="100" font-family="Arial, sans-serif" font-size="10" fill="#34495e" font-weight="bold">
+      생성:
+    </text>
+    <text x="650" y="100" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      매 요청마다 (Step 6 직후)
+    </text>
+    
+    <text x="605" y="120" font-family="Arial, sans-serif" font-size="10" fill="#34495e" font-weight="bold">
+      생성 주체:
+    </text>
+    <text x="670" y="120" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      Tomcat (Step 7 전에)
+    </text>
+    
+    <text x="605" y="140" font-family="Arial, sans-serif" font-size="10" fill="#34495e" font-weight="bold">
+      사용:
+    </text>
+    <text x="650" y="140" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      service(req, res) 파라미터로
+    </text>
+    
+    <text x="605" y="160" font-family="Arial, sans-serif" font-size="10" fill="#34495e" font-weight="bold">
+      소멸:
+    </text>
+    <text x="650" y="160" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      응답 후 즉시 (일회용)
+    </text>
+    
+    <rect x="605" y="170" width="260" height="15" rx="5" fill="#e74c3c" opacity="0.2"/>
+    <text x="735" y="181" font-family="Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+      ⚠️ 요청당 1쌍씩 생성 → 사용 → 소멸
+    </text>
+  </g>
+  
+  <!-- Request/Response 객체 설명 박스 -->
+  <g id="req-res-explanation">
+    <rect x="320" y="50" width="250" height="140" rx="8" fill="white" stroke="#9b59b6" stroke-width="2"/>
+    <text x="445" y="70" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#9b59b6">
+      📦 Request/Response 객체
+    </text>
+    
+    <line x1="330" y1="80" x2="560" y2="80" stroke="#ecf0f1" stroke-width="1"/>
+    
+    <text x="330" y="100" font-family="Arial, sans-serif" font-size="10" fill="#3498db" font-weight="bold">
+      Request 객체:
+    </text>
+    <text x="340" y="115" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      • HTTP 요청 정보 담김
+    </text>
+    <text x="340" y="128" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      • 파라미터, 헤더, 메소드 등
+    </text>
+    
+    <text x="330" y="148" font-family="Arial, sans-serif" font-size="10" fill="#f39c12" font-weight="bold">
+      Response 객체:
+    </text>
+    <text x="340" y="163" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      • HTTP 응답 정보 설정
+    </text>
+    <text x="340" y="176" font-family="Arial, sans-serif" font-size="9" fill="#7f8c8d">
+      • 상태코드, 헤더, 바디 등
+    </text>
+  </g>
+  
+  <!-- 실행 횟수 요약 테이블 -->
+  <g id="execution-summary">
+    <rect x="50" y="50" width="250" height="140" rx="8" fill="white" stroke="#34495e" stroke-width="2"/>
+    <text x="175" y="70" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#34495e">
+      📊 각 단계별 실행 횟수
+    </text>
+    
+    <line x1="60" y1="80" x2="290" y2="80" stroke="#ecf0f1" stroke-width="1"/>
+    
+    <text x="70" y="100" font-family="Arial, sans-serif" font-size="10" fill="#4caf50" font-weight="bold">
+      1~5번:
+    </text>
+    <text x="120" y="100" font-family="Arial, sans-serif" font-size="10" fill="#34495e">
+      서버 시작 시 1회
+    </text>
+    
+    <text x="70" y="120" font-family="Arial, sans-serif" font-size="10" fill="#3498db" font-weight="bold">
+      6번:
+    </text>
+    <text x="120" y="120" font-family="Arial, sans-serif" font-size="10" fill="#34495e">
+      매 요청마다 (N회)
+    </text>
+    
+    <text x="70" y="140" font-family="Arial, sans-serif" font-size="10" fill="#e74c3c" font-weight="bold">
+      7번:
+    </text>
+    <text x="120" y="140" font-family="Arial, sans-serif" font-size="10" fill="#34495e">
+      첫 요청 시 1회만
+    </text>
+    
+    <text x="70" y="160" font-family="Arial, sans-serif" font-size="10" fill="#27ae60" font-weight="bold">
+      8번:
+    </text>
+    <text x="120" y="160" font-family="Arial, sans-serif" font-size="10" fill="#34495e">
+      매 요청마다 (N회)
+    </text>
+    
+    <text x="70" y="180" font-family="Arial, sans-serif" font-size="10" fill="#c0392b" font-weight="bold">
+      destroy():
+    </text>
+    <text x="120" y="180" font-family="Arial, sans-serif" font-size="10" fill="#34495e">
+      서버 종료 시 1회
+    </text>
+  </g>
+  
+  <!-- 제목 -->
+  <text x="450" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Spring Boot Application 전체 라이프사이클
+  </text>
+  
+  <!-- Phase 1: 애플리케이션 시작 -->
+  <g id="startup-phase">
+    <rect x="50" y="60" width="800" height="320" rx="10" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+    <rect x="50" y="60" width="800" height="35" fill="#4caf50"/>
+    <text x="70" y="83" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">
+      Phase 1: 애플리케이션 시작 (서버 구동 시)
+    </text>
+    
+    <!-- Step 1 -->
+    <g id="step1">
+      <rect x="70" y="110" width="200" height="60" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+      <circle cx="90" cy="140" r="12" fill="white"/>
+      <text x="90" y="144" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#3498db">1</text>
+      <text x="170" y="135" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+        main() 실행
+      </text>
+      <text x="170" y="155" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">
+        SpringApplication.run()
+      </text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 270 140 L 310 140" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    
+    <!-- Step 2 -->
+    <g id="step2">
+      <rect x="310" y="110" width="200" height="60" rx="8" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+      <circle cx="330" cy="140" r="12" fill="white"/>
+      <text x="330" y="144" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#27ae60">2</text>
+      <text x="410" y="135" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+        Spring Context 생성
+      </text>
+      <text x="410" y="155" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">
+        Bean 로드, DI 준비
+      </text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 510 140 L 550 140" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    
+    <!-- Step 3 -->
+    <g id="step3">
+      <rect x="550" y="110" width="200" height="60" rx="8" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+      <circle cx="570" cy="140" r="12" fill="white"/>
+      <text x="570" y="144" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#e74c3c">3</text>
+      <text x="650" y="135" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+        Tomcat 시작
+      </text>
+      <text x="650" y="155" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">
+        Port 8080 바인딩
+      </text>
+    </g>
+    
+    <!-- Arrow down -->
+    <path d="M 650 170 L 650 200" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    
+    <!-- Step 4 -->
+    <g id="step4">
+      <rect x="300" y="200" width="500" height="80" rx="8" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+      <circle cx="320" cy="220" r="12" fill="white"/>
+      <text x="320" y="224" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#9b59b6">4</text>
+      <text x="550" y="220" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+        Servlet Container 초기화
+      </text>
+      <text x="350" y="245" font-family="Arial, sans-serif" font-size="10" fill="white">
+        • @ServletComponentScan 처리
+      </text>
+      <text x="350" y="260" font-family="Arial, sans-serif" font-size="10" fill="white">
+        • @WebServlet 스캔 → 서블릿 등록 (인스턴스 생성 X)
+      </text>
+      
+      <!-- Mapping table -->
+      <rect x="600" y="235" width="180" height="35" rx="5" fill="#8e44ad" opacity="0.3"/>
+      <text x="610" y="250" font-family="Arial, sans-serif" font-size="9" fill="white">/hello</text>
+      <text x="680" y="250" font-family="Arial, sans-serif" font-size="9" fill="white">→ HelloServlet.class</text>
+      <text x="690" y="265" font-family="Arial, sans-serif" font-size="8" fill="#ecf0f1">(클래스 정보만 저장)</text>
+    </g>
+    
+    <!-- Arrow down -->
+    <path d="M 550 280 L 550 310" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    
+    <!-- Step 5: Ready -->
+    <g id="step5">
+      <rect x="300" y="310" width="500" height="50" rx="8" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+      <circle cx="320" cy="335" r="12" fill="white"/>
+      <text x="320" y="339" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#2ecc71">5</text>
+      <text x="550" y="340" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+        ✅ 애플리케이션 준비 완료 (요청 대기 중...)
+      </text>
+    </g>
+  </g>
+  
+  <!-- 대기 상태 -->
+  <g id="waiting">
+    <rect x="350" y="395" width="200" height="30" rx="15" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+    <text x="450" y="415" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      대기 상태
+    </text>
+  </g>
+  
+  <!-- Arrow to Phase 2 -->
+  <path d="M 450 425 L 450 450" stroke="#e74c3c" stroke-width="3" fill="none" marker-end="url(#arrowhead-red)"/>
+  <text x="480" y="440" font-family="Arial, sans-serif" font-size="10" fill="#e74c3c">첫 요청!</text>
+  
+  <!-- Phase 2: 요청 처리 -->
+  <g id="request-phase">
+    <rect x="50" y="460" width="800" height="280" rx="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+    <rect x="50" y="460" width="800" height="35" fill="#ff9800"/>
+    <text x="70" y="483" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">
+      Phase 2: 요청 처리 (Client 요청 시)
+    </text>
+    
+    <!-- 실행 횟수 및 타이밍 표시 -->
+  <g id="execution-info">
+    <!-- 서버 시작 시 1회 -->
+    <rect x="760" y="110" width="80" height="170" rx="5" fill="#4caf50" opacity="0.2" stroke="#4caf50" stroke-width="1"/>
+    <text x="800" y="100" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#4caf50">
+      서버 시작 시
+    </text>
+    <text x="800" y="250" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#4caf50">
+      1회만
+    </text>
+    
+    <!-- 매 요청마다 -->
+    <rect x="70" y="510" width="150" height="60" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+    <circle cx="90" cy="540" r="12" fill="white"/>
+    <text x="90" y="544" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#3498db">6</text>
+    <text x="145" y="535" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">
+      Client 요청
+    </text>
+    <text x="145" y="555" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">
+      GET /hello
+    </text>
+    <rect x="70" y="575" width="150" height="20" rx="5" fill="#3498db" opacity="0.3"/>
+    <text x="145" y="588" font-family="Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" fill="#2980b9">
+      매 요청마다 (N회)
+    </text>
+  </g>
+    
+    <!-- Request/Response 생성 위치 표시 화살표 -->
+  <g id="req-res-arrow">
+    <path d="M 240 540 L 260 540" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    
+    <!-- Request/Response 객체 생성 표시 -->
+    <g id="req-res-creation">
+      <rect x="225" y="510" width="30" height="60" rx="5" fill="#9b59b6" opacity="0.3"/>
+      <text x="240" y="503" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#9b59b6" font-weight="bold">
+        6.5
+      </text>
+      <text x="240" y="530" font-family="Arial, sans-serif" font-size="7" text-anchor="middle" fill="#9b59b6">
+        Req
+      </text>
+      <text x="240" y="540" font-family="Arial, sans-serif" font-size="7" text-anchor="middle" fill="#9b59b6">
+        /
+      </text>
+      <text x="240" y="550" font-family="Arial, sans-serif" font-size="7" text-anchor="middle" fill="#9b59b6">
+        Res
+      </text>
+      <text x="240" y="560" font-family="Arial, sans-serif" font-size="7" text-anchor="middle" fill="#9b59b6">
+        생성
+      </text>
+    </g>
+  </g>
+  
+  <!-- Arrow -->
+    <g id="step7">
+      <rect x="260" y="510" width="200" height="100" rx="8" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+      <circle cx="280" cy="530" r="12" fill="white"/>
+      <text x="280" y="534" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#e74c3c">7</text>
+      <text x="360" y="530" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">
+        서블릿 인스턴스 생성
+      </text>
+      <rect x="275" y="545" width="170" height="20" rx="5" fill="#c0392b"/>
+      <text x="360" y="558" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">
+        ⚡ 최초 요청시에만!
+      </text>
+      <text x="275" y="580" font-family="Arial, sans-serif" font-size="9" fill="white">
+        • new HelloServlet()
+      </text>
+      <text x="275" y="595" font-family="Arial, sans-serif" font-size="9" fill="white">
+        • init() 호출
+      </text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 460 540 L 500 540" stroke="#34495e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    
+    <!-- Step 8: Process Request (더 자세히) -->
+    <g id="step8">
+      <rect x="500" y="510" width="330" height="100" rx="8" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+      <circle cx="520" cy="530" r="12" fill="white"/>
+      <text x="520" y="534" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#27ae60">8</text>
+      <text x="665" y="530" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">
+        요청 처리 과정
+      </text>
+      
+      <!-- Request/Response 객체 표시 -->
+      <g id="request-response-objects">
+        <!-- Request 객체 -->
+        <rect x="515" y="545" width="70" height="25" rx="3" fill="#3498db" stroke="#2980b9" stroke-width="1"/>
+        <text x="550" y="560" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white">
+          Request
+        </text>
+        
+        <!-- Response 객체 -->
+        <rect x="590" y="545" width="70" height="25" rx="3" fill="#f39c12" stroke="#e67e22" stroke-width="1"/>
+        <text x="625" y="560" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white">
+          Response
+        </text>
+        
+        <text x="680" y="553" font-family="Arial, sans-serif" font-size="8" fill="white">
+          ← 파라미터로 전달
+        </text>
+        <text x="680" y="565" font-family="Arial, sans-serif" font-size="7" fill="#e8f5e9">
+          (매 요청마다 새로운 객체)
+        </text>
+      </g>
+      
+      <!-- service 메소드 호출 -->
+      <rect x="515" y="575" width="305" height="25" rx="3" fill="white" opacity="0.2"/>
+      <text x="520" y="590" font-family="Arial, sans-serif" font-size="9" fill="white">
+        → service(request, response) 호출 → 응답 반환
+      </text>
+    </g>
+    
+    <!-- Step 8.5: 객체 소멸 -->
+    <g id="req-res-destroy">
+      <rect x="835" y="510" width="50" height="100" rx="5" fill="#95a5a6" opacity="0.3"/>
+      <text x="860" y="503" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d" font-weight="bold">
+        8.5
+      </text>
+      <text x="860" y="540" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#7f8c8d">
+        Req/Res
+      </text>
+      <text x="860" y="555" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#7f8c8d">
+        객체
+      </text>
+      <text x="860" y="570" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#7f8c8d">
+        소멸
+      </text>
+      <text x="860" y="590" font-family="Arial, sans-serif" font-size="7" text-anchor="middle" fill="#95a5a6">
+        (GC 대상)
+      </text>
+    </g>
+    
+    <rect x="500" y="615" width="330" height="20" rx="5" fill="#27ae60" opacity="0.3"/>
+    <text x="665" y="628" font-family="Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" fill="#229954">
+      매 요청마다 (N회)
+    </text>
+    
+    <!-- 이후 요청들 -->
+    <g id="subsequent">
+      <rect x="260" y="640" width="625" height="90" rx="8" fill="#ecf0f1" stroke="#95a5a6" stroke-width="2" stroke-dasharray="5,5"/>
+      <text x="572" y="660" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#7f8c8d">
+        이후 요청들 (2번째부터)
+      </text>
+      
+      <!-- Request flows with Req/Res -->
+      <rect x="280" y="675" width="60" height="25" rx="5" fill="#3498db" opacity="0.5"/>
+      <text x="310" y="692" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Req #2</text>
+      
+      <text x="350" y="692" font-family="Arial, sans-serif" font-size="8" fill="#9b59b6">→ Req/Res 생성</text>
+      
+      <rect x="440" y="675" width="60" height="25" rx="5" fill="#3498db" opacity="0.5"/>
+      <text x="470" y="692" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Req #3</text>
+      
+      <text x="510" y="692" font-family="Arial, sans-serif" font-size="8" fill="#9b59b6">→ Req/Res 생성</text>
+      
+      <rect x="600" y="675" width="60" height="25" rx="5" fill="#3498db" opacity="0.5"/>
+      <text x="630" y="692" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Req #N</text>
+      
+      <text x="670" y="692" font-family="Arial, sans-serif" font-size="8" fill="#9b59b6">→ Req/Res 생성</text>
+      
+      <rect x="710" y="670" width="160" height="50" rx="5" fill="#e74c3c" opacity="0.2"/>
+      <text x="790" y="685" font-family="Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+        ⚠️ 중요
+      </text>
+      <text x="720" y="700" font-family="Arial, sans-serif" font-size="8" fill="#7f8c8d">
+        • 7번만 건너뜀 (인스턴스 존재)
+      </text>
+      <text x="720" y="713" font-family="Arial, sans-serif" font-size="8" fill="#7f8c8d">
+        • Req/Res는 매번 새로 생성!
+      </text>
+    </g>
+  </g>
+  
+  <!-- 서버 종료 -->
+  <g id="shutdown">
+    <rect x="50" y="755" width="800" height="35" rx="10" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+    <text x="450" y="778" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      서버 종료 시: destroy() 메소드 호출 → 서블릿 인스턴스 제거 (1회)
+    </text>
+  </g>
+  
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#e74c3c"/>
+    </marker>
+  </defs>
+</svg>
